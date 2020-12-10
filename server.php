@@ -1,6 +1,7 @@
 <?php
 session_destroy();
 session_start();
+///This is a test comment
 //include('db_build.php');
 //$_POST['reg_user'] = "trial_post1";
 //$_SESSION["username"] = $_POST["username"];
