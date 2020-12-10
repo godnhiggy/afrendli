@@ -27,7 +27,8 @@ if (isset($_POST['submitRegister'])) {
   // receive all input values from the form
 //echo "working2";
   $username = mysqli_real_escape_string($db, $_POST['userName']);
-  $email = mysqli_real_escape_string($db, $_POST['email']);
+$sender_name = $_POST['userName'];
+$email = mysqli_real_escape_string($db, $_POST['email']);
   $password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
   $password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
   $textNumber = mysqli_real_escape_string($db, $_POST['textNumber']);
@@ -36,6 +37,39 @@ if (isset($_POST['submitRegister'])) {
   $teamName = mysqli_real_escape_string($db, $_POST['teamName']);
   $teamName = $teamName.".".$username;
   //echo $teamName;
+
+	build_tables($sender_name);
+
+function build_tables($myUserName){
+$servername = "fdb27.biz.nf";
+$username = "3650290_database";
+$password = "trashcan1";
+$dbname = "3650290_database";
+
+
+// Check connection to build tables for app
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+$sender_name = $myUserName;
+// sql to create CUSTOMERS table
+$sql = "CREATE TABLE $myUserName (
+id INT UNSIGNED AUTO_INCREMENT,
+message VARCHAR(200) NOT NULL,
+reciever VARCHAR(30) NOT NULL,
+timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+primary key (id))";
+
+
+if ($conn->query($sql) === TRUE) {
+  echo "Table Name created successfully";
+} else {
+  echo "Error creating table: " . $conn->error;
+}
+
+}
 
 
   // form validation: ensure that the form is correctly filled ...
