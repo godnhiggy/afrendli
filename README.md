@@ -1,3 +1,5 @@
 # afrendli
 taking over youth sports
-"bite my shiny metal ***"
+Thursday Dec 10
+  Tarver - Add table build to register.php
+  
