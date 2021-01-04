@@ -1,9 +1,14 @@
+/*body {
+  background-color: #2196F3; /* for browsers with no support of gradient
+  background-image: linear-gradient(grey, white );
+}*/
+
 .grid-container {
   display: grid;
   grid-template-columns: auto auto auto auto;
   grid-gap: 3px;
   background-color: #2196F3; /* for browsers with no support of gradient */
-  background-image: linear-gradient(grey, white );
+  /*background-image: linear-gradient(grey, white );*/
   padding: 3px;
   justify-content: center;
   }
@@ -18,8 +23,7 @@
 
 }
 .topleft  { grid-area: 1 / 1 / 2 / 2;
-            font-size: 14px;
-
+            font-size: 11px;
 }
 .header   { grid-area: 1 / 2 / 2 / 4; }
 .logout   { grid-area: 1 / 4 / 2 / 5; }
@@ -33,9 +37,12 @@
 #menu {
   font-size: 15px;
 }
-
-.schedule {
+button.read {
   width: 50px;
+  font-size: 10px;
+}
+.schedule {
+  width: 40px;
   font-size: 10px;
 }
 input {
@@ -81,4 +88,18 @@ border-right: 1px solid #333333;
 border-bottom: 1px solid #333333;
 border-left: 1px solid #CCCCCC;
 border-radius: 6px;
+}
+
+button {
+ font: bold 9px Arial;
+ width: 80px;
+ padding: 0px 0px 0px 0px;
+ height: 35px;
+border-radius: 6px;
+}
+#wrap {
+  width: 125px;
+  white-space: wrap;
+  /*overflow: hidden;*/
+  text-overflow: ellipsis;
 }

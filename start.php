@@ -4,6 +4,8 @@ session_start();
 $userName = $_SESSION["userName"];
 $teamName = $_SESSION["teamName"];
 $teamId = $_SESSION["teamId"];
+$team2 = $_POST["team2"];
+
  ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -13,6 +15,10 @@ $teamId = $_SESSION["teamId"];
   <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+  body {
+    background-color: #2196F3; /* for browsers with no support of gradient */
+
+  }
   table {margin-left: auto;
          margin-right: auto;}
          a.color {
@@ -82,12 +88,13 @@ $teamId = $_SESSION["teamId"];
       </div>
       <div class="subject"></div>
     <div class="main">
-      Helping you find the right competition!
-      <br>
-      <video width="320" height="240" controls>
-  <source src="video.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<?php
+      echo "<h1>Welcome, ".$teamName."!</h1>";
+      echo "<br>";
+
+
+?>
+
     </div>
     </div>
   </body>

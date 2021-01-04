@@ -33,15 +33,38 @@ $( function() {
   $( "#datepicker" ).datepicker();
 } );
 </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
 
 
   <style>
+
+
+  body {
+    background-color: #2196F3; /* for browsers with no support of gradient*/
+    /*background-image: linear-gradient(grey, white );*/
+  }
+
+
   table {
     margin-left: auto;
     margin-right: auto;
   }
+  #border {
+    border: 1px solid black;
+    border-radius: 4px;
+  }
+
+  #panel {
+    border: 1px solid black;
+    border-radius: 4px;
+    background-color: grey;
+    padding: 4px 10px 4px 10px;
+  }
+
+
+
  .small {
     font-size: 12px;
  }
@@ -75,10 +98,12 @@ $( function() {
 
   }
   .topleft  { grid-area: 1 / 1 / 2 / 2;
-              font-size: 14px;
-
+              font-size: 10px ;
+               text-align: center;
   }
-  .header   { grid-area: 1 / 2 / 2 / 4; }
+  .header   { grid-area: 1 / 2 / 2 / 4;
+    font: 14px Arial;
+  }
   .logout   { grid-area: 1 / 4 / 2 / 5; }
 
   .menu     { grid-area: 2 / 1 / 3 / 5; }
@@ -87,18 +112,12 @@ $( function() {
 
   .main     { grid-area: 4 / 1 / 5 / 5; }
 
-  .button {
-  font: bold 11px Arial;
-  text-decoration: none;
-  background-color: #EEEEEE;
-  color: #333333;
-  padding: 2px 6px 2px 6px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
-  border-radius: 6px;
-  }
+
+
+  #topleft {
+     font: bold 9px Arial;
+   }
+
 
   .round{
     box-shadow: 0px 0px 5px  black inset;
@@ -108,90 +127,112 @@ $( function() {
     font-size: 12px;
     padding: 5px;
   }
+
+  button {
+   font: bold 9px Arial;
+   width: 80px;
+   padding: 0px 0px 0px 0px;
+   height: 35px;
+  }
+
+  #medium {
+    font-size: 20px;
+  }
   </style>
   </head>
+  <?php
+  $teamNames = $_SESSION["teamNames"];
+  //echo "the first index has value ".$teamNames[0];
+   //DB Connect
+   $servername = "localhost";
+   $username = "bjekqemy_higgy";
+   $password = "Brett73085";
+   $dbname = "bjekqemy_ball";
+   // Create connection
+   $conn = mysqli_connect($servername, $username, $password, $dbname);
+   // Check connection
+   if (!$conn) {
+     die("Connection failed: " . mysqli_connect_error());
+   }
+   //echo "Connected successfully";
+   $teamNames = array();
+   $opponentId = array();
+   $id = 0;
+   $sql = "select * from team where teamId>?";
+   $stmt = $conn->prepare($sql);
+   $stmt->bind_param("i", $id);
+   $stmt->execute();
+   $result = $stmt-> get_result();
+  //$teams = $result->fetch_assoc();
+
+   while ($row = $result->fetch_assoc()){
+    array_push($teamNames, $row['teamName']);
+    array_push($opponentId, $row['teamId']);
+    }
+
+   $stmt->close();
+   $conn->close();
+
+   $_SESSION["teamNames"] = $teamNames;
+    ?>
+
+
   <body>
     <div class="grid-container">
-      <div class="topleft"></div>
+      <div class="topleft" id="topleft">
+<?php echo $teamName; ?>
+      </div>
       <div class="header">
-        <div>
-        <h2>afrendli</h2>
-      </div>
-      <div>
-        <?php echo $teamName; ?>
-        <br><br>
-      </div>
+        afrendli
         </div>
-      <div class="logout"></div>
-    <div class="menu" id="menu">
-      <div>
-       <a href="test3.php" class="button">Score a Game</a>&nbsp;&nbsp;
-        <a href="rank.php" class="button">Schedule a Game</a>&nbsp;&nbsp;
+      <div class="logout"><a href="logout.php" class="button">Logout</a></div>
 
-         <a href="schedule.php" class="button">Results</a>
-        <!--<a href="unlistedTeam.php" class="button">Recruit to Afrendli</a>-->
+      <div class="menu" id="menu">
+        <button onclick="window.location.href='schedule.php';">
+      current<br> schedule
+    </button>
+    <button onclick="window.location.href='test3.php';">
+    score a<br>past game
+    </button>
+    <button onclick="window.location.href='rank.php';">
+    schedule a<br>future game
+    </button>
+    <button onclick="window.location.href='message0.php';">
+    read<br>messages
+    </button>
+
+
 
       </div>
-    </div>
-    <div class="subject"><span class="middle">Score a Game</span><br>
-<span class="small"> <b>Submit</b> the game score...</span><br><span class="small"> ...and let your opponent <b>Confirm</b>!</span><br><br>
+    <div class="subject">
+      <span id='opponentIdshow'>
+
+        <form action="function.php" method="POST">
+        <select required name='opponentName' id='opponentId'>
+        <option value="" selected disabled>Who did you play?</option>
+        <option value = "unlisted">Team not listed</option>
+        <?php
+        $arrlength = count($teamNames);
+            for($x = 0; $x < $arrlength; $x++){
+              //echo "<option value='".$opponentId[$x]."'>".$teamNames[$x]."</option>";
+echo "<option value='".$teamNames[$x]."'>".$teamNames[$x]."</option>";
+            }
+        ?>
+        </select>
+      </span>
     </div>
     <div class="main">
 
-      <?php
-      $teamNames = $_SESSION["teamNames"];
-      //echo "the first index has value ".$teamNames[0];
-       //DB Connect
-       $servername = "localhost";
-       $username = "bjekqemy_higgy";
-       $password = "Brett73085";
-       $dbname = "bjekqemy_ball";
-       // Create connection
-       $conn = mysqli_connect($servername, $username, $password, $dbname);
-       // Check connection
-       if (!$conn) {
-         die("Connection failed: " . mysqli_connect_error());
-       }
-       //echo "Connected successfully";
-       $teamNames = array();
-       $opponentId = array();
-       $id = 0;
-       $sql = "select * from team where teamId>?";
-       $stmt = $conn->prepare($sql);
-       $stmt->bind_param("i", $id);
-       $stmt->execute();
-       $result = $stmt-> get_result();
-      //$teams = $result->fetch_assoc();
-
-       while ($row = $result->fetch_assoc()){
-        array_push($teamNames, $row['teamName']);
-        array_push($opponentId, $row['teamId']);
-        }
-
-       $stmt->close();
-       $conn->close();
-
-       $_SESSION["teamNames"] = $teamNames;
-        ?>
+<span id="medium">14u Fastpitch</span><br>
 
 
-        <form action="function.php" method="POST">
-          <table class="center">
 
+          <table id="border" class="center">
+            <tr>ScoreBoard</tr>
         <tr>
-          <td class="round" ><?php echo $teamName;?></td>
+          <td id="panel"><span id="us">Us</span><span style="display: none" id="usUpdated"><?php echo $teamName;?></span></td>
 
-          <td align="center"><select id="inputid" name='opponentId' id='opponentId' required>
-            <option value="" selected disabled>Choose Opponent</option>
-            <option value = "unlisted">Team not listed</option>
-            <?php
-            $arrlength = count($teamNames);
-                for($x = 0; $x < $arrlength; $x++){
-                  echo "<option value='".$opponentId[$x]."'>".$teamNames[$x]."</option>";
-                }
-            ?>
-            </select>
-          </td>
+          <td id="panel"><span id="opponent">Opponent</span><span style="display: none" id="opponentUpdated"><?php echo $teamName;?></span></td>
         </tr>
         <tr>
           <td align="center"><input type="number" id="inputid" size="2" name="teamScore" required min="0" max="99"></td>
@@ -217,7 +258,7 @@ $( function() {
 
 
 <select name='location' id='location' required>
-<option value="blank" selected disabled>Choose Location</option>
+<option value="blank" selected disabled>Organization Played Under</option>
 <option value="afrendli" >just afrendli game</option>
 <option value="asa" >ASA</option>
 <option value="gsa" >GSA</option>
@@ -244,5 +285,21 @@ $( function() {
       </div>
 
 </div>
+
+<script>
+$(document).ready(function(){
+  //var end = this.value;
+  $("#opponentId").change(function(){
+$("#opponentUpdated").html(this.value);
+    $("#usUpdated").show();
+
+
+    $("#us").hide();
+    $("#opponentUpdated").show();
+    $("#opponent").hide();
+  });
+});
+</script>
+
   </body>
 </html>

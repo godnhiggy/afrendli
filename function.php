@@ -96,14 +96,14 @@ if($_POST["submitGameDay"]){
   $stmt->close();
   $conn->close();
   // the message
-  $msg = "Congratulations on being invited to afrendli!\nLet's play ball!\nRegister at https://coachhiggy.com/ball2 \nCoach Higgy";
+  $msg = "Congratulations on being invited to afrendli!\nLet's play ball!\nRegister at https://afrendli.com \nto confirm the score of one of your games!\nCoach Higgy";
 
   // use wordwrap() if lines are longer than 70 characters
   $msg = wordwrap($msg,70);
 
   // send email
   mail($inviteTeamEmail,"Welcome to Friendly",$msg);
-  header("Location: start.php");
+  header("Location: schedule.php");
   }
 
 
@@ -156,11 +156,69 @@ if($_POST["submitGameDay"]){
   $conn->close();
   header("Location: schedule.php");
   }
+
+  if($_POST["confirmGameRequest"]){
+    $servername = "localhost";
+    $username = "bjekqemy_higgy";
+    $password = "Brett73085";
+    $dbname = "bjekqemy_ball";
+    // Create connection
+    $conn = mysqli_connect($servername, $username, $password, $dbname);
+
+    // Check connection
+    if (!$conn) {
+      die("Connection failed: " . mysqli_connect_error());
+    }
+
+    $confirmGameRequest = $_POST["confirmGameRequest"];
+
+    $sql = "UPDATE scheduleGame SET confirm ='yes' WHERE ScheduleGameId=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $confirmGameRequest);
+    $stmt->execute();
+
+  $stmt->close();
+  $conn->close();
+  header("Location: schedule.php");
+  }
+
+  if($_POST["deleteGameRequest"]){
+
+    $servername = "localhost";
+    $username = "bjekqemy_higgy";
+    $password = "Brett73085";
+    $dbname = "bjekqemy_ball";
+    // Create connection
+    $conn = mysqli_connect($servername, $username, $password, $dbname);
+
+    // Check connection
+    if (!$conn) {
+      die("Connection failed: " . mysqli_connect_error());
+    }
+
+
+    $deleteGameRequest = $_POST["deleteGameRequest"];
+
+    $sql = "DELETE FROM scheduleGame WHERE ScheduleGameId=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $deleteGameRequest);
+    $stmt->execute();
+
+  $stmt->close();
+  $conn->close();
+  header("Location: schedule.php");
+  }
+
+
+
+
+
 ////input from test3 for organization input!!!!
 if($_POST["submitGameDay_2"]){
   $teamScore = $_POST["teamScore"];
   $teamScore = preg_replace('/[^0-9.]+/', '', $teamScore);
-  $opponentId = $_POST["opponentId"];
+  $opponentName = $_POST["opponentName"];
+  //echo $opponentName;
   $opponentScore = $_POST{"opponentScore"};
   $opponentScore = preg_replace('/[^0-9.]+/', '', $opponentScore);
 
@@ -183,9 +241,9 @@ if($_POST["submitGameDay_2"]){
     }
   ////////////////pull opponent name from db to insert into games table
 
-  $sql = "SELECT * FROM team WHERE teamId = ?";
+  $sql = "SELECT * FROM team WHERE teamName = ?";
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param("i", $opponentId);
+  $stmt->bind_param("s", $opponentName);
   $stmt->execute();
   $result = $stmt-> get_result();
   $rowCountT = mysqli_num_rows($result);
@@ -194,19 +252,28 @@ if($_POST["submitGameDay_2"]){
       {
         while($row = $result->fetch_assoc())
          {
-           $opponentName = $row["teamName"];
-       }
-     }
+            $opponentId = $row["teamId"];
+         }
+         }
 
-    $stmt = $conn->prepare("INSERT INTO games (teamId, teamName, teamScore, opponentId, opponentName, opponentScore, location, datex, timex, confirm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssississss", $teamId, $teamName, $teamScore, $opponentId, $opponentName, $opponentScore, $location, $gameDate, $gameTime, $confirm);
-    $stmt->execute();
-    $stmt->close();
-    $conn->close();
+
+
+
+         $stmt = $conn->prepare("INSERT INTO games (teamId, teamName, teamScore, opponentId, opponentName, opponentScore, location, datex, timex, confirm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+         $stmt->bind_param("ssississss", $teamId, $teamName, $teamScore, $opponentId, $opponentName, $opponentScore, $location, $gameDate, $gameTime, $confirm);
+         $stmt->execute();
+         //$stmt->close();
+         //$conn->close();
+
+
   //if($opponentId == "unlisted"){header("location: https://www.google.com");}
-  if($opponentId == "unlisted"){header("Location: unlistedTeam.php");}else{
+  if($opponentId == ""){header("Location: unlistedTeam.php");}else{
 
   header("Location: schedule.php");}
   }
 
+if($_POST["messageRead"]){
+  $_SESSION["messageRead"]=$_POST["messageRead"];
+  header("Location: message0.php");
+}
 ?>

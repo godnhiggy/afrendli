@@ -11,6 +11,10 @@ $useremail = $_GET['useremail'];
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+    body {
+      background-color: #2196F3; /* for browsers with no support of gradient*/
+      /*background-image: linear-gradient(grey, white );*/
+    }
       table {margin-left: auto;
              margin-right: auto;}
              .grid-container {

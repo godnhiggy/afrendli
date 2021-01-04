@@ -19,18 +19,12 @@ $sport = $_SESSION['sport'];
   <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-  .button {
-  font: bold 11px Arial;
-  text-decoration: none;
-  background-color: #EEEEEE;
-  color: #333333;
-  padding: 2px 6px 2px 6px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
-  border-radius: 6px;
+
+  body {
+    background-color: #2196F3; /* for browsers with no support of gradient*/
+    /*background-image: linear-gradient(grey, white );*/
   }
+
     table {
           margin-left: auto;
            margin-right: auto;
@@ -67,10 +61,12 @@ $sport = $_SESSION['sport'];
 
          }
          .topleft  { grid-area: 1 / 1 / 2 / 2;
-                     font-size: 14px;
-
+                     font-size: 10px ;
+                      text-align: center;
          }
-         .header   { grid-area: 1 / 2 / 2 / 4; }
+         .header   { grid-area: 1 / 2 / 2 / 4;
+           font: 14px Arial;
+         }
          .logout   { grid-area: 1 / 4 / 2 / 5; }
 
          .menu     { grid-area: 2 / 1 / 3 / 5; }
@@ -78,36 +74,69 @@ $sport = $_SESSION['sport'];
          .subject  { grid-area: 3 / 1 / 4 / 5; }
 
          .main     { grid-area: 4 / 1 / 5 / 5; }
+
+         .button {
+         font: bold 11px Arial;
+         text-decoration: none;
+         background-color: #EEEEEE;
+         color: #333333;
+         padding: 2px 6px 2px 6px;
+         border-top: 1px solid #CCCCCC;
+         border-right: 1px solid #333333;
+         border-bottom: 1px solid #333333;
+         border-left: 1px solid #CCCCCC;
+         border-radius: 6px;
+         }
+
+         button {
+          font: bold 9px Arial;
+          width: 80px;
+          padding: 0px 0px 0px 0px;
+          height: 35px;
+         }
+
+         #topleft {
+            font: bold 9px Arial;
+          }
+          #medium {
+            font-size: 20px;
+          }
+
   </style>
   </head>
   <body>
     <div class="grid-container">
-      <div class="topleft"></div>
+      <div class="topleft" id="topleft">
+<?php echo $teamName; ?>
+      </div>
       <div class="header">
-        <div>
-        <h2>afrendli</h2>
-      </div>
-      <div>
-        <?php echo $teamName; ?>
-        <br><br>
-      </div>
+        afrendli
         </div>
-      <div class="logout"></div>
-    <div class="menu" id="menu">
-      <div>
-       <a href="test3.php" class="button">Score a Game</a>&nbsp;&nbsp;
-        <a href="rank.php" class="button">Schedule a Game</a>&nbsp;&nbsp;
+      <div class="logout"><a href="logout.php" class="button">Logout</a></div>
 
-         <a href="schedule.php" class="button">Results</a>
-        <!--<a href="unlistedTeam.php" class="button">Recruit to Afrendli</a>-->
+      <div class="menu" id="menu">
+        <button onclick="window.location.href='schedule.php';">
+      current<br> schedule
+    </button>
+    <button onclick="window.location.href='test3.php';">
+    score a<br>past game
+    </button>
+    <button onclick="window.location.href='rank.php';">
+    schedule a<br>future game
+    </button>
+    <button onclick="window.location.href='message0.php';">
+    read<br>messages
+    </button>
+
+
 
       </div>
-    </div>
-    <div class="subject">
-      <h2>Schedule Games</h2>
+      <div class="subject">
+<span id="medium">14u Fastpitch</span><br>
+Send a Game Request
 
-      <span class="small">Click Box to Schedule a Game </span>
-    </div>
+
+      </div>
     <div class="main">
       <?php
       ////insert new game data into DB
@@ -250,7 +279,7 @@ if(!empty($newTeamId)){
       ?>
       <table class="center">
         <form action="game_request_email_action.php" method="POST">
-        <tr><th>Ranking</th><th>Team</th><th>Click Box</th></tr>
+        <tr><th>Rank</th><th></th><th>Choose Team!</th></tr>
 
         <script>
           function stuff(){
@@ -262,14 +291,16 @@ if(!empty($newTeamId)){
 
       <?php
       krsort($myarray);
+      //print_r($myarray);
+      $_SESSION["rankArray"];
       foreach ($myarray as $totalTeamRank => $arrayRankEmail) {
         foreach($arrayRankEmail as $email=>$newTeamId){
           $x=$x+1;
           $color="black";
           if($newTeamId==$teamName){$color="red";}else{$color="black";}
           echo "<tr style='color:".$color.";'><td align='right'>".$totalTeamRank.":&nbsp&nbsp</td><td align='left'>".$newTeamId."</td><td>
-          <input type='checkbox' id='messageBoxCheck' name='messageReceiver[]' value='".$email."'></td></tr>";
-          echo "<input type='hidden' name='messageReceiverTeamName[]' value='".$newTeamId."'>";
+          <input type='checkbox' id='messageBoxCheck' name='messageReceiver[]' value='".$newTeamId."'></td></tr>";
+          //echo "<input type='hidden' name='messageReceiverTeamName[]' value='".$newTeamId."'>";
           }}
        ?>
       </table>
@@ -285,7 +316,7 @@ if(!empty($newTeamId)){
         </table>
         <input type="submit" id=buttonSubmit name="submitMessage" value="Submit">
     </div>
-    </form>
+  </form>
 
 
 

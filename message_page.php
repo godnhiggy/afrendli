@@ -14,10 +14,9 @@ $teamId = $_SESSION["teamId"];
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
   body {
-    background-color: #2196F3; /* for browsers with no support of gradient*/
-    /*background-image: linear-gradient(grey, white );*/
-  }
+    background-color: #2196F3; /* for browsers with no support of gradient */
 
+  }
   table {margin-left: auto;
          margin-right: auto;}
          a.color {
@@ -55,15 +54,28 @@ $teamId = $_SESSION["teamId"];
          .subject  { grid-area: 3 / 1 / 4 / 5; }
 
          .main     { grid-area: 4 / 1 / 5 / 5; }
+
+         .button {
+         font: bold 11px Arial;
+         text-decoration: none;
+         background-color: #EEEEEE;
+         color: #333333;
+         padding: 2px 6px 2px 6px;
+         border-top: 1px solid #CCCCCC;
+         border-right: 1px solid #333333;
+         border-bottom: 1px solid #333333;
+         border-left: 1px solid #CCCCCC;
+         border-radius: 6px;
+         }
   </style>
   </head>
   <body>
     <div class="grid-container">
-      <div class="topleft"><a href="register.php" class="color">Register</a></div>
+      <div class="topleft"><a href="register.php" class="button">Register</a></div>
       <div class="header">
         <h2>afrendli</h2>
         </div>
-      <div class="logout"><a href="login.php" class="color">Login</a></div>
+      <div class="logout"><a href="login.php" class="button">Login</a></div>
 
       <div class="menu" id="menu">
  <!--<a href="test3.php">Scoring a Game</a>&nbsp;&nbsp;
@@ -74,12 +86,42 @@ $teamId = $_SESSION["teamId"];
       </div>
       <div class="subject"></div>
     <div class="main">
-      Helping you find the right competition!
+    <?php
+echo "Welcome ".$teamName;
+    ?>
+      <br>Helping you find the right competition!
       <br>
-      <video width="320" height="240" controls>
-  <source src="video.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+      <?php
+      $servername = "localhost";
+      $dbusername = "bjekqemy_higgy";
+      $password = "Brett73085";
+      $dbname = "bjekqemy_ball";
+      //echo $sender $receiver $message;
+      $conn = new mysqli($servername, $dbusername, $password, $dbname);
+      // Check connection
+      if ($conn->connect_error) {
+         die("Connection failed: " . $conn->connect_error);
+      }
+  echo "<form method='POST' action='message_log.php'>";
+      $sql = "SELECT DISTINCT receiver FROM $teamName";
+      $result = $conn->query($sql);
+      if ($result->num_rows > 0)
+                {
+
+          // output data of each row
+          while($row = $result->fetch_assoc()) {
+             // $totalwordcount = str_word_count($row["essay"]);
+
+
+              $receiver = $row["receiver"];
+
+          echo  "<input type='submit' name='team2' value='".$receiver."' id='submit'/>";
+          echo  "<br>";
+
+          }
+       }
+echo "</form>";
+                  ?>
     </div>
     </div>
   </body>

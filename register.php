@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -6,8 +9,13 @@
   <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+  body {
+    background-color: #2196F3; /* for browsers with no support of gradient*/
+    /*background-image: linear-gradient(grey, white );*/
+  }
   table {margin-left: auto;
-         margin-right: auto;}
+         margin-right: auto;
+       }
          .grid-container {
            display: grid;
            grid-template-columns: auto auto auto auto;
@@ -27,22 +35,26 @@
            font-size: 15px;
 
          }
-         .topleft  { grid-area: 1 / 1 / 2 / 2;
+        /* .topleft  { grid-area: 1 / 1 / 2 / 2;
                      font-size: 14px;
-
+         }*/
+         .header   { grid-area: 1 / 1 / 2 / 5;
+           font: 14px Helvetica, sans-serif;
          }
-         .header   { grid-area: 1 / 2 / 2 / 4; }
-         .logout   { grid-area: 1 / 4 / 2 / 5; }
+        /* .logout   { grid-area: 1 / 4 / 2 / 5; }*/
 
          .menu     { grid-area: 2 / 1 / 3 / 5; }
 
          .subject  { grid-area: 3 / 1 / 4 / 5; }
 
          .main     { grid-area: 4 / 1 / 5 / 5; }
+
+         .bottom     { grid-area: 5 / 1 / 6 / 5; }
+
          table td + td { border-left:0px solid transparent; }
 
          .button {
-         font: 6px Arial;
+         font: 6px Helvetica, sans-serif;
          text-decoration: none;
          background-color: #EEEEEE;
          color: #333333;
@@ -76,17 +88,17 @@
         <!--  <tr height="25px>">
         </tr>-->
         <tr>
-          <td align="left"><input style="text-align: right" type="text" id="teamName" name="teamName" required size="10" maxlength="20"></td>
-          <td align="center"><font size="5">.</font></td>
+          <td align="right"><input style="text-align: right" type="text" id="teamName" name="teamName" required size="10" maxlength="20"></td>
+          <td align="center"><font size="5">_</font></td>
           <td align="left"><input type="text" id="userName" name="userName" required size="10" maxlength="20"></td>
         </tr>
         <tr>
-          <td align="right"><label for="passWord">Password:</label></td>
+          <td align="right"><label for="password_1">Password:</label></td>
           <td></td>
           <td align="left"><input type="password" id="password_1" name="password_1" required size="10"maxlength="20" ></td>
         </tr>
         <tr>
-          <td align="right"><label for="passWord">Confirm Password:</label></td>
+          <td align="right"><label for="password_2">Confirm Password:</label></td>
           <td></td>
           <td align="left"><input type="password" id="password_2" name="password_2"required size="10"maxlength="20"></td>
         </tr>
@@ -136,6 +148,19 @@
     <input type="submit" name="submitRegister" value="Submit">
   </form>
 
+  </div>
+  <div class="bottom">
+    <?php
+      if(isset($_SESSION["emailError"])){
+        echo "Email already in use....please re-register!";
+        unset($_SESSION['emailError']);
+      }
+      echo "<br>";
+      if(isset($_SESSION["teamNameError"])){
+        echo "Team Name already in use....please re-register!";
+        unset($_SESSION['teamNameError']);
+      }
+     ?>
   </div>
 </div>
   </body>

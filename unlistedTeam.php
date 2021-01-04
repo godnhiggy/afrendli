@@ -12,6 +12,10 @@ $teamId = $_SESSION["teamId"];
      <link rel="stylesheet" href="style.css">
      <meta name="viewport" content="width=device-width, initial-scale=1">
      <style>
+     body {
+       background-color: #2196F3; /* for browsers with no support of gradient*/
+       /*background-image: linear-gradient(grey, white );*/
+     }
      a {
         color: black;
         text-decoration: none;
@@ -48,19 +52,20 @@ $teamId = $_SESSION["teamId"];
               font-size: 15px;
 
             }
-            .header   { grid-area: 1 / 1 / 2 / 5; }
-            .menu     { grid-area: 2 / 1 / 3 / 3; }
-            /*.topleft  { grid-area: 2 / 3 / 3 / 5;
-                        font-size: 14px;
-            }*/
+            .topleft  { grid-area: 1 / 1 / 2 / 2;
+                        font-size: 10px ;
+                         text-align: center;
+            }
+            .header   { grid-area: 1 / 2 / 2 / 4;
+              font: 14px Arial;
+            }
+            .logout   { grid-area: 1 / 4 / 2 / 5; }
 
-            .logout   { grid-area: 2 / 3 / 3 / 5; }
+            .menu     { grid-area: 2 / 1 / 3 / 5; }
 
+            .subject  { grid-area: 3 / 1 / 4 / 5; }
 
-
-            .subject  { grid-area: 4 / 1 / 5 / 5; }
-
-            .main     { grid-area: 5 / 1 / 6 / 5; }
+            .main     { grid-area: 4 / 1 / 5 / 5; }
 
             .button {
             font: bold 11px Arial;
@@ -74,36 +79,56 @@ $teamId = $_SESSION["teamId"];
             border-left: 1px solid #CCCCCC;
             border-radius: 6px;
             }
+
+
+            button {
+             font: bold 9px Arial;
+             width: 80px;
+             padding: 0px 0px 0px 0px;
+             height: 35px;
+            }
+
+
+
+            #topleft {
+               font: bold 12px Arial;
+             }
+
      </style>
      </head>
    <body>
      <div class="grid-container">
-       <div class="topleft"></div>
+       <div class="topleft" id="topleft">
+ <?php echo $teamName; ?>
+       </div>
        <div class="header">
-         <div>
-         <h2>afrendli</h2>
-       </div>
-       <div>
-         <?php echo $teamName; ?>
-         <br><br>
-       </div>
+         afrendli
          </div>
-       <div class="logout"></div>
-     <div class="menu" id="menu">
-       <div>
-        <a href="test3.php" class="button">Score a Game</a>&nbsp;&nbsp;
-         <a href="rank.php" class="button">Schedule a Game</a>&nbsp;&nbsp;
+       <div class="logout"><a href="logout.php" class="button">Logout</a></div>
 
-          <a href="schedule.php" class="button">Results</a>
-         <!--<a href="unlistedTeam.php" class="button">Recruit to Afrendli</a>-->
+       <div class="menu" id="menu">
+         <button onclick="window.location.href='schedule.php';">
+       current<br> schedule
+     </button>
+     <button onclick="window.location.href='test3.php';">
+     score a<br>past game
+     </button>
+     <button onclick="window.location.href='rank.php';">
+     schedule a<br>future game
+     </button>
+     <button onclick="window.location.href='message0.php';">
+     read<br>messages
+     </button>
+
+
 
        </div>
-     </div>
+       <div class="subject">
 
-     <div class="subject">
-       <h3>Recruit a New Team!</h3>
-       Help us build your network!
-     </div>
+ Recruit a new team!
+
+
+       </div>
      <div class="main">
        <br>
        <form id="greybox" action="function.php" method="POST">

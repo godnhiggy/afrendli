@@ -26,6 +26,11 @@ $_SESSION["gameTime"] = $gameTime;
   <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+  body {
+    background-color: #2196F3; /* for browsers with no support of gradient*/
+    /*background-image: linear-gradient(grey, white );*/
+  }
+
   table {
       margin-left: auto;
       margin-right: auto;
@@ -54,64 +59,117 @@ $_SESSION["gameTime"] = $gameTime;
     padding: 5px 0;
     font-size: 15px;
 
-  }
-  .topleft  { grid-area: 1 / 1 / 2 / 2;
-              font-size: 14px;
 
   }
-  .header   { grid-area: 1 / 2 / 2 / 4; }
+  .topleft  { grid-area: 1 / 1 / 2 / 2;
+              font-size: 10px ;
+               text-align: center;
+  }
+  .header   { grid-area: 1 / 2 / 2 / 4;
+    font: 14px Helvetica, sans-serif;
+  }
   .logout   { grid-area: 1 / 4 / 2 / 5; }
 
   .menu     { grid-area: 2 / 1 / 3 / 5; }
 
-  .subject  { grid-area: 3 / 1 / 4 / 5; }
+  .subject  { grid-area: 3 / 1 / 4 / 5;
+              font: 16px Helvetica, sans-serif;
+  }
 
   .main     { grid-area: 4 / 1 / 5 / 5; }
 
-  .button {
-  font: bold 11px Arial;
-  text-decoration: none;
-  background-color: #EEEEEE;
-  color: #333333;
-  padding: 2px 6px 2px 6px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
-  border-radius: 6px;
-  }
+  .scheduleHead {
+    font: 16px Helvetica, sans-serif;
+    }
+
+  #topleft {
+     font: Bold 9px Helvetica, sans-serif;
+   }
+
+   .button {
+   font: bold 11px Helvetica, sans-serif;
+   text-decoration: none;
+   background-color: #EEEEEE;
+   color: #333333;
+   padding: 2px 6px 2px 6px;
+   border-top: 1px solid #CCCCCC;
+   border-right: 1px solid #333333;
+   border-bottom: 1px solid #333333;
+   border-left: 1px solid #CCCCCC;
+   border-radius: 6px;
+   }
+
+   button {
+    font: 9px Helvetica, sans-serif;
+    width: 80px;
+    padding: 0px 0px 0px 0px;
+    height: 35px;
+   }
+
+   button.read {
+     width: 240px;
+     font-size: 10px;
+   }
+
+   .delete {
+     width: 40px;
+     font-size: 10px;
+    background-color: red;
+    color: white;
+   }
+
+   .confirm {
+     width: 40px;
+     font-size: 10px;
+    background-color: green;
+    color: white;
+   }
+   #medium {
+     font-size: 20px;
+   }
+
   </style>
   </head>
   <body>
     <div class="grid-container">
-      <div class="topleft"></div>
+      <div class="topleft" id="topleft">
+<?php echo $teamName; ?>
+      </div>
       <div class="header">
-        <div>
-        <h2>afrendli</h2>
-      </div>
-      <div>
-        <?php echo $teamName; ?>
-        <br><br>
-      </div>
+        afrendli
         </div>
-      <div class="logout"></div>
-    <div class="menu" id="menu">
-      <div>
-       <a href="test3.php" class="button">Score a Game</a>&nbsp;&nbsp;
-        <a href="rank.php" class="button">Schedule a Game</a>&nbsp;&nbsp;
+      <div class="logout"><a href="logout.php" class="button">Logout</a>
+      </div>
 
-         <a href="schedule.php" class="button">Results</a>
-        <!--<a href="unlistedTeam.php" class="button">Recruit to Afrendli</a>-->
+      <div class="menu" id="menu">
+    <button onclick="window.location.href='schedule.php';">
+      current <br>schedule
+    </button>
+    <button onclick="window.location.href='test3.php';">
+    score a<br>past game
+    </button>
+    <button onclick="window.location.href='rank.php';">
+    schedule a<br>future game
+    </button>
+    <button onclick="window.location.href='message0.php';">
+    read<br>messages
+    </button>
+
+
 
       </div>
-    </div>
-    <div class="subject"></div>
+      <div class="subject">
+<span id="medium">14u Fastpitch</span><br>
+Your Schedule
+
+
+      </div>
     <div class="main">
-      Welcome <?php echo $teamName; ?>
+
       <form action='function.php' method='POST'>
       <table class="border">
 
-        <tr><td class="small">Date</td><td class="small">Opponent</td><td class="small"></td></tr></span>
+
 
 
 
@@ -128,7 +186,88 @@ $_SESSION["gameTime"] = $gameTime;
       if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
       }
+      ///this pulls and presents future games where team is game request sender or receiver
+      $sql = "SELECT * FROM scheduleGame WHERE messageSender = ? OR messageReceiver = ? ORDER BY datex DESC ";
+      $stmt = $conn->prepare($sql);
+      $stmt->bind_param("ii", $teamName, $teamName);
+      $stmt->execute();
+      $result = $stmt-> get_result();
+      $rowCountT = mysqli_num_rows($result);
 
+      if ($result->num_rows >0)
+        {
+          while($row = $result->fetch_assoc())
+           {
+
+             $confirm = $row["confirm"];
+             $receiver = $row["messageReceiver"];
+             $sender = $row["messageSender"];
+             $time = $row["timex"];
+             $location = $row["location"];
+             $specialNotes = $row["specialNotes"];
+             $scheduleGameId = $row["ScheduleGameId"];
+      ///////////
+
+
+             $date = $row["datex"];
+             $d=strtotime($date);
+             $day = date("D", $d);
+             $date = date("M d y", $d);
+
+
+
+
+if($row["messageSender"] == $teamName){
+$opponent=$receiver;
+
+             if(!empty($confirm)){
+
+               echo "<tr><td colspan='6'>You have a game scheduled on ".$date." at ".$time."</td></tr>";
+               echo "<tr><td colspan='6'> against ".$opponent." at ".$location."</td></tr>";
+
+             }else{
+//echo "<button>".$date."--".$time."--".$opponent."--".$location."--".$specialNotes."</button>";
+                 echo "<tr><td align='center' colspan='4'>
+                 <button class='read' type='submit' name='messageRead' value='".$opponent."'>
+                 Game Request: ".$date.' '.$time.'<br>'.$opponent.", ".$location."
+                </button></td>
+                <td><button class='delete type='submit' name='deleteGameRequest' value='".$scheduleGameId."'>del</button></td></tr>";
+
+            }
+
+           }else{
+
+
+
+if($row["messageReceiver"] == $teamName){
+$opponent=$sender;
+
+             if(!empty($confirm)){
+               echo "<tr><td colspan='6'>You have a game scheduled on ".$date." at ".$time."</td></tr>";
+               echo "<tr><td colspan='6'> against ".$opponent." at ".$location."</td></tr>";
+
+             }else{
+                //echo "<tr><td>".$date."--".$time."--".$opponent."--".$location."--".$specialNotes."</td></tr>";
+                echo "<tr><td align='center' colspan='4'>
+                <button class='read' type='submit' name='messageRead' value='".$opponent."'>
+                Game Request: ".$date.' '.$time.'<br>'.$opponent.", ".$location."
+               </button></td>
+                 <td><button class='delete type='submit' name='deleteGameRequest' value='".$scheduleGameId."'>del</button></td>
+                 <td><button class='confirm' type='submit' name='confirmGameRequest' value='".$scheduleGameId."'>conf</button></td></tr>";
+             }
+             //echo $teamId."-Us - ".$teamScore."----Them - ".$opponentScore."<br>";
+           }
+            }
+              }
+            }
+
+?>
+
+<tr class="scheduleHead"><td >Date</td><td>Opponent</td><td colspan="2">Score</td></tr></span>
+
+<?php
+
+      ///this pulls and presents previous games where team is home or opponent
       $sql = "SELECT * FROM games WHERE teamId = ? OR opponentId = ? ORDER BY datex DESC ";
       $stmt = $conn->prepare($sql);
       $stmt->bind_param("ii", $teamId, $teamId);
@@ -178,7 +317,7 @@ $_SESSION["gameTime"] = $gameTime;
                    <td align='right'>".$opponentName."</td>
                    <td align='left'>".$gameResult."</td>
                    <td align='left'>".$teamScore." to ".$opponentScore."</td>
-                   <td><button class='schedule type='submit' name='deleteScore' value='".$gameId."'>del</button></td></tr>";
+                   <td><button class='delete' type='submit' name='deleteScore' value='".$gameId."'>del</button></td></tr>";
                }
                //echo $teamId."-Us - ".$teamScore."----Them - ".$opponentScore."<br>";
              }else{
@@ -210,8 +349,8 @@ $_SESSION["gameTime"] = $gameTime;
                    <td align='right'>".$opponentName."</td>
                    <td align='left'>".$gameResult."</td>
                    <td align='left'>".$teamScore." to ".$opponentScore."</td>
-                   <td><button class='schedule' type='submit' name='deleteScore' value='".$gameId."'>del</button></td>
-                   <td><button class='schedule' type='submit' name='confirmScore' value='".$gameId."'>conf</button></td></tr>";
+                   <td><button class='delete' type='submit' name='deleteScore' value='".$gameId."'>del</button></td>
+                   <td><button class='confirm' type='submit' name='confirmScore' value='".$gameId."'>conf</button></td></tr>";
 
                }
 
