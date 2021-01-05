@@ -66,6 +66,7 @@
     <div class="menu" id="menu">
 
           <a href="register.php" class="button">Need to Register?</a>
+          <a href="emailsend.html" class="button">Need Reset Info</a>
 
     </div>
     <div class="subject"></div>
