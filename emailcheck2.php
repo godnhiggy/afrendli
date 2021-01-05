@@ -2,8 +2,8 @@
 $email = $_POST['search'];
 
 $servername = "localhost";
-$username = "root";
-$password = "";
+$username = "bjekqemy_higgy";
+$password = "Brett73085";
 $dbname = "bjekqemy_ball";
 
 // Create connection
@@ -40,10 +40,10 @@ $newTeamName = $_POST['newTeamName'];
 $newPassword = $_POST['newPassword'];
 $newPassword2 = md5($newPassword);
 $verifiedEmail = $_POST['emailverify'];
-  $servername = "localhost";
-  $username = "root";
-  $password = "";
-  $dbname = "bjekqemy_ball";
+$servername = "localhost";
+$username = "bjekqemy_higgy";
+$password = "Brett73085";
+$dbname = "bjekqemy_ball";
 
   // Create connection
   $conn = new mysqli($servername, $username, $password, $dbname);
@@ -138,7 +138,7 @@ $verifiedEmail = $_POST['emailverify'];
       </div>
       <div class="subject"></div>
     <div class="main">
-      Helping you find the right competition!
+     
       <br>
     <form action="" method="post" action="emailcheck2.php">
 <input type="hidden" name="id" value="<?php echo $id; ?>"/>

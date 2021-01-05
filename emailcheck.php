@@ -67,10 +67,8 @@
       </div>
       <div class="subject"></div>
     <div class="main">
-      Helping you find the right competition!
       <br>
    <div class="header">
-  <h1>Header</h1>
   <p>Input Your email here</p>
 </div>
       <form action="emailcheck2.php" method="post">
