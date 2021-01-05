@@ -69,64 +69,78 @@ $verifiedEmail = $_POST['emailverify'];
 ?>
 
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
 <head>
-<title>Edit Info</title>
-</head>
-<style>
-.textinput {
-background-color: white; /* Green */
-border: none;
-color: black;
-padding: 15px 32px;
-text-align: center;
-text-decoration: none;
-display: inline-block;
-font-size: 16px;
-margin: 4px 2px;
-cursor: pointer;
--webkit-transition-duration: 0.4s; /* Safari */
-transition-duration: 0.4s;
-}
-.button {
-background-color: black; /* Green */
-border: none;
-color: white;
-padding: 15px 32px;
-text-align: center;
-text-decoration: none;
-display: inline-block;
-font-size: 16px;
-margin: 4px 2px;
-cursor: pointer;
--webkit-transition-duration: 0.4s; /* Safari */
-transition-duration: 0.4s;
-}
-.button1 {
-box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-}
-body {
-font-family: Arial;
-margin: 0;
-}
+  <meta charset="utf-8">
+  <title>afrendli score game</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+  body {
+    background-color: #2196F3; /* for browsers with no support of gradient*/
+    /*background-image: linear-gradient(grey, white );*/
+  }
 
-/* Header/Logo Title */
-.header {
-padding: 1px;
-text-align: center;
-background: #1abc9c;
-color: white;
-font-size: 30px;
-}
-</style>
-<body>
-  <div class="header">
-  <h1>Afrendli</h1>
-  </div>
+  table {margin-left: auto;
+         margin-right: auto;}
+         a.color {
+           color: black;
+           font-size: 12px;
+         }
+         .grid-container {
+           display: grid;
+           grid-template-columns: auto auto auto auto;
+           grid-gap: 3px;
+           background-color: #2196F3; /* for browsers with no support of gradient */
+           background-image: linear-gradient(grey, white );
+           padding: 3px;
+           justify-content: center;
+           }
 
+         .grid-container > div {
+           width: 100%; /* try different value for this */
+           margin: auto;
+           justify-content: center;
+           text-align: center;
+           padding: 5px 0;
+           font-size: 25px;
 
-<form action="" method="post" action="emailcheck2.php">
+         }
+         .topleft  { grid-area: 1 / 1 / 2 / 2;
+                     font-size: 18px;
+
+         }
+         .header   { grid-area: 1 / 2 / 2 / 4; }
+         .logout   { grid-area: 1 / 4 / 2 / 5; }
+
+         .menu     { grid-area: 2 / 1 / 3 / 5; }
+
+         .subject  { grid-area: 3 / 1 / 4 / 5; }
+
+         .main     { grid-area: 4 / 1 / 5 / 5; }
+  </style>
+  </head>
+  <body>
+    <div class="grid-container">
+      <div class="topleft"><a href="register.php" class="color">Register</a></div>
+      <div class="header">
+        <h2>afrendli</h2>
+        </div>
+      <div class="logout"><a href="login.php" class="color">Login</a></div>
+
+      <div class="menu" id="menu">
+ <!--<a href="test3.php">Scoring a Game</a>&nbsp;&nbsp;
+          <a href="rank.php">Positioning</a> &nbsp;&nbsp;
+           <a href="schedule.php">Schedule</a> &nbsp;&nbsp;
+           <a href="unlistedTeam.php">Invite a Team</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+-->
+      </div>
+      <div class="subject"></div>
+    <div class="main">
+      Helping you find the right competition!
+      <br>
+    <form action="" method="post" action="emailcheck2.php">
 <input type="hidden" name="id" value="<?php echo $id; ?>"/>
 <center>
 <table border="1">
@@ -164,5 +178,7 @@ font-size: 30px;
 </table>
 </center>
 </form>
-</body>
+    </div>
+    </div>
+  </body>
 </html>
